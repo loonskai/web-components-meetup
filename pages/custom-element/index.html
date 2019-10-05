@@ -55,7 +55,8 @@
           });
         }
 
-        attributeChangedCallback() {
+        attributeChangedCallback(name, oldValue, newValue) {
+          if (oldValue === newValue) return;
           // Is called on mounting too
           const [title, input, img] = this.shadowRoot.children[0].children;
           img.setAttribute('src', this.imageUrl);
@@ -63,7 +64,7 @@
           this.updateStyles();
         }
 
-        /* Custom methods */
+        /* Our custom methods */
         setStyles() {
           const style = document.createElement('style');
           style.textContent = `
@@ -125,18 +126,21 @@
           this.style.setProperty('--main-dark-color', '#58595B');
           this.style.setProperty('--main-color', mainColor);
         }
-        /* Custom properties */
+
+        /* Our custom properties */
+        get value() {
+          return this.getAttribute('value').toLowerCase();
+        }
+
         get imageUrl() {
-          const value = this.getAttribute('value').toLowerCase();
           return `./pics/${
-            this.existingNames.includes(value) ? value : 'default'
+            this.existingNames.includes(this.value) ? this.value : 'default'
           }.jpg`;
         }
 
         get status() {
-          const value = this.getAttribute('value').toLowerCase();
-          if (this.restrictedNames.includes(value)) return 'invalid';
-          return this.existingNames.includes(value) ? 'valid' : 'default';
+          if (this.restrictedNames.includes(this.value)) return 'invalid';
+          return this.existingNames.includes(this.value) ? 'valid' : 'default';
         }
 
         get existingNames() {
