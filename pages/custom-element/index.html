@@ -16,9 +16,9 @@
     </style>
   </head>
   <body>
-    <non-toxic value="Somevalue">Search Box</non-toxic>
+    <my-search-box value="Somevalue">Search Box</my-search-box>
     <script>
-      class NonToxic extends HTMLElement {
+      class MySearchBox extends HTMLElement {
         constructor() {
           // Always call super first in constructor
           super();
@@ -152,7 +152,7 @@
         }
       }
 
-      customElements.define('non-toxic', NonToxic);
+      customElements.define('my-search-box', MySearchBox);
     </script>
   </body>
 </html>
