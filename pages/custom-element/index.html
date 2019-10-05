@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Custom Element</title>
+    <style>
+      body {
+        background-color: #1d1e22;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        padding-top: 20px;
+      }
+    </style>
   </head>
   <body>
-    <non-toxic value="Somevalue">Non-toxic search</non-toxic>
+    <non-toxic value="Somevalue">Search Box</non-toxic>
     <script>
       class NonToxic extends HTMLElement {
         constructor() {
@@ -18,28 +27,21 @@
           const shadow = this.attachShadow({ mode: 'open' });
 
           // Create elements
+          const wrapper = document.createElement('div');
+          wrapper.setAttribute('class', 'wrapper');
           const title = document.createElement('h1');
           title.textContent = this.textContent || 'Default title';
           const input = document.createElement('input');
           const img = document.createElement('img');
-          img.setAttribute('src', this.imageUrl);
-          // Insert image
-          let picUrl;
 
           // Attached elements to shadow DOM
-          shadow.appendChild(title);
-          shadow.appendChild(input);
-          shadow.appendChild(img);
-        }
+          shadow.appendChild(wrapper);
+          wrapper.appendChild(title);
+          wrapper.appendChild(input);
+          wrapper.appendChild(img);
 
-        get imageUrl() {
-          const value = this.getAttribute('value').toLowerCase();
-          const allowedNames = ['max', 'julia', 'eugene', 'alex', 'alexey'];
-          if (allowedNames.includes(value)) {
-            return `./pics/${value}.jpg`;
-          } else {
-            return './pics/default.jpg';
-          }
+          // Apply styles through custom method
+          this.setStyles();
         }
 
         static get observedAttributes() {
@@ -47,15 +49,102 @@
         }
 
         connectedCallback() {
-          const [title, input, img] = this.shadowRoot.children;
+          const [title, input, img] = this.shadowRoot.children[0].children;
           input.addEventListener('input', e => {
             this.setAttribute('value', e.target.value);
           });
         }
 
         attributeChangedCallback() {
-          const [title, input, img] = this.shadowRoot.children;
+          // Is called on mounting too
+          const [title, input, img] = this.shadowRoot.children[0].children;
           img.setAttribute('src', this.imageUrl);
+          input.setAttribute('class', this.inputStatus);
+          this.updateStyles();
+        }
+
+        /* Custom methods */
+        setStyles() {
+          const style = document.createElement('style');
+          style.textContent = `
+            @import url('https://fonts.googleapis.com/css?family=Fredoka+One&display=swap');
+
+            .wrapper {
+              width: 220px;
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              background-color: var(--main-dark-color);
+              border: 10px solid var(--main-color);
+              border-radius: 20px;
+              padding: 10px;
+              padding-bottom: 20px;
+              transition: border-color 0.5s;
+            }
+
+            h1 {
+              font-family: 'Fredoka One', cursive;
+              font-size: 16px;
+              color: var(--main-color);
+              transition: color 0.5s;
+            }
+
+            input {
+              border-radius: 5px;
+              border: none;
+              padding: 10px;
+              margin-bottom: 20px;
+              transition: box-shadow 0.5s;
+              color: var(--main-dark-color);
+              font-family: 'Fredoka One', cursive;
+            }
+
+            input:focus {
+              outline: none;
+              box-shadow: 0 0 0 3px var(--main-color);
+              border-radius: 5px;
+              transition: box-shadow 0.5s;
+            }
+          `;
+          this.shadowRoot.appendChild(style);
+          this.updateStyles();
+        }
+
+        updateStyles() {
+          let mainColor;
+          switch (this.status) {
+            case 'valid':
+              mainColor = 'mediumspringgreen';
+              break;
+            case 'invalid':
+              mainColor = 'red';
+              break;
+            default:
+              mainColor = '#F0ECE9';
+          }
+          this.style.setProperty('--main-dark-color', '#58595B');
+          this.style.setProperty('--main-color', mainColor);
+        }
+        /* Custom properties */
+        get imageUrl() {
+          const value = this.getAttribute('value').toLowerCase();
+          return `./pics/${
+            this.existingNames.includes(value) ? value : 'default'
+          }.jpg`;
+        }
+
+        get status() {
+          const value = this.getAttribute('value').toLowerCase();
+          if (this.restrictedNames.includes(value)) return 'invalid';
+          return this.existingNames.includes(value) ? 'valid' : 'default';
+        }
+
+        get existingNames() {
+          return JSON.parse(localStorage.getItem('allowedNames'));
+        }
+
+        get restrictedNames() {
+          return JSON.parse(localStorage.getItem('restrictedNames'));
         }
       }
 
