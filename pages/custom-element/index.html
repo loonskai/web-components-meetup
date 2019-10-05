@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Custom Element</title>
+  </head>
+  <body>
+    <non-toxic value="Somevalue">Non-toxic search</non-toxic>
+    <script>
+      class NonToxic extends HTMLElement {
+        constructor() {
+          // Always call super first in constructor
+          super();
+
+          // Create shadow root
+          const shadow = this.attachShadow({ mode: 'open' });
+
+          // Create elements
+          const title = document.createElement('h1');
+          title.textContent = this.textContent || 'Default title';
+          const input = document.createElement('input');
+          const img = document.createElement('img');
+          img.setAttribute('src', this.imageUrl);
+          // Insert image
+          let picUrl;
+
+          // Attached elements to shadow DOM
+          shadow.appendChild(title);
+          shadow.appendChild(input);
+          shadow.appendChild(img);
+        }
+
+        get imageUrl() {
+          const value = this.getAttribute('value').toLowerCase();
+          const allowedNames = ['max', 'julia', 'eugene', 'alex', 'alexey'];
+          if (allowedNames.includes(value)) {
+            return `./pics/${value}.jpg`;
+          } else {
+            return './pics/default.jpg';
+          }
+        }
+
+        static get observedAttributes() {
+          return ['value'];
+        }
+
+        connectedCallback() {
+          const [title, input, img] = this.shadowRoot.children;
+          input.addEventListener('input', e => {
+            this.setAttribute('value', e.target.value);
+          });
+        }
+
+        attributeChangedCallback() {
+          const [title, input, img] = this.shadowRoot.children;
+          img.setAttribute('src', this.imageUrl);
+        }
+      }
+
+      customElements.define('non-toxic', NonToxic);
+    </script>
+  </body>
+</html>
