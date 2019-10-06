@@ -14,38 +14,6 @@ class MySearchBox extends HTMLElement {
     title.textContent = this.textContent || 'Default title';
     const input = document.createElement('input');
     const img = document.createElement('img');
-
-    // Attached elements to shadow DOM
-    shadow.appendChild(wrapper);
-    wrapper.appendChild(title);
-    wrapper.appendChild(input);
-    wrapper.appendChild(img);
-
-    // Apply styles through custom method
-    this.setStyles();
-  }
-
-  static get observedAttributes() {
-    return ['value'];
-  }
-
-  connectedCallback() {
-    const [title, input, img] = this.shadowRoot.children[0].children;
-    input.addEventListener('input', e => {
-      this.setAttribute('value', e.target.value);
-    });
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue === newValue) return;
-    const [title, input, img] = this.shadowRoot.children[0].children;
-    img.setAttribute('src', this.imageUrl);
-    input.setAttribute('class', this.inputStatus);
-    this.updateStyles();
-  }
-
-  /* Our custom methods */
-  setStyles() {
     const style = document.createElement('style');
     style.textContent = `
       @import url('https://fonts.googleapis.com/css?family=Fredoka+One&display=swap');
@@ -86,11 +54,43 @@ class MySearchBox extends HTMLElement {
         transition: box-shadow 0.5s;
       }
     `;
-    this.shadowRoot.appendChild(style);
+
+    // Attach elements to shadow DOM
+    shadow.appendChild(style);
+    shadow.appendChild(wrapper);
+    wrapper.appendChild(title);
+    wrapper.appendChild(input);
+    wrapper.appendChild(img);
+
+    // Update theme depending on status
+    this.updateTheme();
+  }
+
+  static get observedAttributes() {
+    return ['value'];
+  }
+
+  connectedCallback() {
+    const [title, input, img] = this.shadowRoot.querySelector(
+      '.wrapper'
+    ).children;
+    input.addEventListener('input', e => {
+      this.setAttribute('value', e.target.value);
+    });
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) return;
+    const [title, input, img] = this.shadowRoot.querySelector(
+      '.wrapper'
+    ).children;
+    img.setAttribute('src', this.imageUrl);
+    input.setAttribute('class', this.inputStatus);
     this.updateStyles();
   }
 
-  updateStyles() {
+  /* Our custom methods */
+  updateTheme() {
     let mainColor;
     switch (this.status) {
       case 'valid':
@@ -112,7 +112,7 @@ class MySearchBox extends HTMLElement {
   }
 
   get imageUrl() {
-    return `./pics/${
+    return `/assets/images/${
       this.existingNames.includes(this.value) ? this.value : 'default'
     }.jpg`;
   }
