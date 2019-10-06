@@ -80,13 +80,13 @@ class MySearchBox extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    // Run each time on every attribute change. As we have only one value attribute, we are ok, but if we have many of them we need to compare name property
     if (oldValue === newValue) return;
     const [title, input, img] = this.shadowRoot.querySelector(
       '.wrapper'
     ).children;
     img.setAttribute('src', this.imageUrl);
-    input.setAttribute('class', this.inputStatus);
-    this.updateStyles();
+    this.updateTheme();
   }
 
   /* Our custom methods */
@@ -100,7 +100,7 @@ class MySearchBox extends HTMLElement {
         mainColor = 'red';
         break;
       default:
-        mainColor = '#F0ECE9';
+        mainColor = 'lightgray';
     }
     this.style.setProperty('--main-dark-color', '#58595B');
     this.style.setProperty('--main-color', mainColor);
