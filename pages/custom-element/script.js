@@ -71,9 +71,7 @@ class MySearchBox extends HTMLElement {
   }
 
   connectedCallback() {
-    const [title, input, img] = this.shadowRoot.querySelector(
-      '.wrapper'
-    ).children;
+    const [title, input, img] = this.childElements;
     input.addEventListener('input', e => {
       this.setAttribute('value', e.target.value);
     });
@@ -82,9 +80,7 @@ class MySearchBox extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     // Run each time on every attribute change. As we have only one value attribute, we are ok, but if we have many of them we need to compare name property
     if (oldValue === newValue) return;
-    const [title, input, img] = this.shadowRoot.querySelector(
-      '.wrapper'
-    ).children;
+    const [title, input, img] = this.childElements;
     img.setAttribute('src', this.imageUrl);
     this.updateTheme();
   }
@@ -113,22 +109,19 @@ class MySearchBox extends HTMLElement {
 
   get imageUrl() {
     return `/assets/images/${
-      this.existingNames.includes(this.value) ? this.value : 'default'
+      EXISTING_NAMES.includes(this.value) ? this.value : 'default'
     }.jpg`;
   }
 
   get status() {
-    if (this.restrictedNames.includes(this.value)) return 'invalid';
-    return this.existingNames.includes(this.value) ? 'valid' : 'default';
+    if (RESTRICTED_NAMES.includes(this.value)) return 'invalid';
+    return EXISTING_NAMES.includes(this.value) ? 'valid' : 'default';
   }
 
-  get existingNames() {
-    return JSON.parse(localStorage.getItem('existingNames'));
-  }
-
-  get restrictedNames() {
-    return JSON.parse(localStorage.getItem('restrictedNames'));
+  get childElements() {
+    return this.shadowRoot.querySelector('.wrapper').children;
   }
 }
 
+const { RESTRICTED_NAMES, EXISTING_NAMES } = window;
 customElements.define('my-search-box', MySearchBox);

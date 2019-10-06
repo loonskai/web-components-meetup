@@ -1,5 +1,2 @@
-localStorage.setItem(
-  'existingNames',
-  JSON.stringify(['max', 'julia', 'eugene', 'alex', 'alexey'])
-);
-localStorage.setItem('restrictedNames', JSON.stringify(['alexey']));
+window.EXISTING_NAMES = ['max', 'julia', 'eugene', 'alex', 'alexey'];
+window.RESTRICTED_NAMES = ['alexey'];
