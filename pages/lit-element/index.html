@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Custom Element</title>
+    <link rel="stylesheet" href="/assets/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Creepster&display=swap"
+      rel="stylesheet"
+    />
+    <script async defer src="/assets/script.js"></script>
+    <!-- TODO: Показать, что св-ва тега перезаписывают :host -->
+    <style>
+      img {
+        visibility: hidden;
+      }
+      /* TODO: Рассказать про custom css properties и theming */
+      my-login-form {
+        /* --myFontFamily: 'Creepster', cursive; */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav">
+      <a href="/index.html">&lt;</a>
+      <h1>lit-element</h1>
+    </div>
+    <my-login-form attemptsAllowed="5">
+      <!-- TODO: Показать через инспектор, где shadow dom, а где переданные картинки (light DOM) -->
+      <img
+        slot="warning"
+        src="https://media.giphy.com/media/11V6nqs0pzhvJm/giphy.gif"
+      />
+      <img
+        slot="allowed"
+        src="https://media.giphy.com/media/ii6Qkun2m31hm/giphy.gif"
+      />
+    </my-login-form>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
