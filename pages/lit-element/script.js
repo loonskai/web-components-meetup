@@ -28,6 +28,12 @@ class MyLoginForm extends LitElement {
     this.blocked = false;
   }
 
+  updated(changedProperties) {
+    if (changedProperties.has('blocked') && this.blocked) {
+      this.className = 'warning';
+    }
+  }
+
   // TODO: Рассказать о возможности использовать css custom properties, чтобы передавать значения переменных в shadow DOM извне
   static get styles() {
     return css`
@@ -40,7 +46,9 @@ class MyLoginForm extends LitElement {
         font-family: var(--myFontFamily, 'Arial Black');
       }
 
-      :host(.warning) {
+      /* TODO: Как в Angular */
+      :host(.warning) .counter {
+        color: red;
       }
 
       ::slotted(img) {
@@ -52,17 +60,32 @@ class MyLoginForm extends LitElement {
       }
 
       ul {
-        font-size: 16px;
+        font-size: 12px;
         color: #1d1e22;
-        margin: 0;
-        padding: 0;
-        padding-left: 10px;
+      }
+
+      .be-careful {
+        font-size: 16px;
+        text-transform: uppercase;
+        margin: 0 auto;
+        color: #fc9b3d;
       }
 
       .counter {
         width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         text-align: center;
         color: #41a6f7;
+        font-size: 30px;
+      }
+
+      .counter span {
+        width: 100%;
+        font-size: 14px;
+        text-transform: uppercase;
+        margin-bottom: -5px;
       }
 
       form {
@@ -118,24 +141,31 @@ class MyLoginForm extends LitElement {
     if (this.attempts >= this.attemptsAllowed) {
       this.blocked = true;
     }
-    console.log('email', this.email);
-    console.log('password', this.password);
+    /*     console.log('email', this.email);
+    console.log('password', this.password); */
+  }
+
+  /* TODO: Раccказать про computed property */
+  get beCareful() {
+    return this.attempts === this.attemptsAllowed - 1
+      ? html`
+          <span class="be-careful">Be careful</span>
+        `
+      : '';
   }
 
   render() {
     return html`
-      <ul>
-        ${this.hints.map(
-          hint =>
-            html`
-              <li>${hint}</li>
-            `
-        )}
-      </ul>
       <!--TODO: Указать разницу между property и attribute -->
       <!-- TODO: Слушатели событий устанавливаются либо через такие декларативы (@), через addEventListener в конструкторе и некоторых lifecycle методах  -->
       <form @submit=${this.handleSubmit}>
-        <div class="counter">${this.attempts} / ${this.attemptsAllowed}</div>
+        ${this.beCareful}
+        <div class="counter">
+          <span>Attempts</span>
+          <div>
+            ${this.attempts} / ${this.attemptsAllowed}
+          </div>
+        </div>
         <input
           @input=${this.handleChange}
           .value=${this.email}
@@ -158,6 +188,14 @@ class MyLoginForm extends LitElement {
             <slot name="warning"></slot>
           `
         : ''}
+      <ul>
+        ${this.hints.map(
+          hint =>
+            html`
+              <li>${hint}</li>
+            `
+        )}
+      </ul>
     `;
   }
 }
