@@ -2,27 +2,30 @@ import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
 import { until } from 'https://unpkg.com/lit-html/directives/until?module';
 import './my-form.js';
 
+// TODO: Рассказать про компонент: форма входа со счетчиком неуспешных попыток
 class MyLogin extends LitElement {
+  // TODO: Рассказать про св-во properties
   static get properties() {
     return {
-      attempts: Number,
-      failed: Boolean,
-      successed: Boolean,
-      isLoading: Boolean,
-      messageRequest: String,
-      // TODO: Если property могут быть любого типа, аттрибуты должны быть строками. Мы можем конвертировать их в соотвествующее property с нужным нам типом, передав в конструкторе флаг reflect: true
-      attemptsAllowed: { type: Number, reflect: true },
+      attempts: { type: Number },
+      failed: { type: Boolean },
+      successed: { type: Boolean },
+      isLoading: { type: Boolean },
+      messageRequest: { type: String },
+      hints: { type: Array },
+      // TODO: Если property могут быть любого типа, аттрибуты должны быть строками. Мы можем конвертировать их в соотвествующее property с нужным нам типом
+      attemptsAllowed: { type: Number },
     };
   }
 
   // TODO: Сказать о том, что property можно инициализировать в конструкторе класса, или как аттрибут в самой разметке
   constructor() {
     super();
-    this.hints = ['Enter your credentials', 'Press "Sign In"', 'Be happy'];
     this.attempts = 0;
     this.failed = false;
     this.successed = false;
-    this.isLoading - false;
+    this.isLoading = false;
+    this.hints = [];
   }
 
   updated(changedProperties) {
@@ -37,6 +40,7 @@ class MyLogin extends LitElement {
   // TODO: Рассказать о возможности использовать css custom properties, чтобы передавать значения переменных в shadow DOM извне
   static get styles() {
     return css`
+      /* TODO: :host - это наш shadowRoot элемент. Те кто работал с Angular должны быть знакомы */
       :host {
         display: inline-block;
         background-color: #f8f7f3;
@@ -46,7 +50,6 @@ class MyLogin extends LitElement {
         font-family: var(--myFontFamily, 'Arial Black');
       }
 
-      /* TODO: Как в Angular */
       :host(.failed) .counter,
       :host(.failed) .message-request {
         color: red;
@@ -57,6 +60,7 @@ class MyLogin extends LitElement {
         color: #2e8b57;
       }
 
+      /* TODO: Через псевдо-элемент ::slotted(селектор передаваемого элемента) мы можем назначать стили для элементов из Light DOM */
       ::slotted(img) {
         display: block;
         margin: 0 auto;
@@ -122,7 +126,7 @@ class MyLogin extends LitElement {
     });
   }
 
-  /* TODO: Раccказать про computed property */
+  /* TODO: Для computed property мы все также используем геттеры */
   get beCareful() {
     return this.attempts === this.attemptsAllowed - 1 && this.successed !== true
       ? html`
@@ -133,8 +137,7 @@ class MyLogin extends LitElement {
 
   render() {
     return html`
-      <!--TODO: Указать разницу между property и attribute -->
-      <!-- TODO: Слушатели событий устанавливаются либо через такие декларативы (@), через addEventListener в конструкторе и некоторых lifecycle методах  -->
+      <!-- TODO: Биндинги достались в наследство от lit-html  -->
       <div class="counter">
         ${this.beCareful}
         <span>Attempts</span>
@@ -143,8 +146,9 @@ class MyLogin extends LitElement {
         </div>
       </div>
       ${!this.successed
-        ? html`
-            <!-- TODO: Провести параллели со Vue. Мы не можем пробрасывать методы внутрь как в React -->
+        ? // TODO: Внимание, если мы хотим использовать разметку внутри плейсхолдера, мы должны возвращать ее из функции html
+          html`
+            <!-- TODO: Провести параллели со Vue. Мы не можем пробрасывать методы внутрь как в React.  -->
             <my-form
               @custom-submit=${this.handleSubmit}
               ?disabled="${this.isLoading || this.failed}"
@@ -172,14 +176,14 @@ class MyLogin extends LitElement {
           `
         : ''}
       <!-- TODO: Рассказать про циклы и маппинг -->
-      <!--       <ul>
+      <ul>
         ${this.hints.map(
-        hint =>
-          html`
-            <li>${hint}</li>
-          `,
-      )}
-      </ul> -->
+          hint =>
+            html`
+              <li>${hint}</li>
+            `,
+        )}
+      </ul>
     `;
   }
 }
