@@ -17,7 +17,7 @@
         visibility: hidden;
       }
       /* TODO: Рассказать про custom css properties и theming */
-      my-login-form {
+      my-login {
         /* --myFontFamily: 'Creepster', cursive; */
       }
     </style>
@@ -27,7 +27,7 @@
       <a href="/index.html">&lt;</a>
       <h1>lit-element</h1>
     </div>
-    <my-login-form attemptsAllowed="5">
+    <my-login attemptsAllowed="5">
       <!-- TODO: Показать через инспектор, где shadow dom, а где переданные картинки (light DOM) -->
       <img
         slot="failed"
@@ -37,7 +37,7 @@
         slot="success"
         src="https://media.giphy.com/media/ii6Qkun2m31hm/giphy.gif"
       />
-    </my-login-form>
+    </my-login>
     <script type="module" src="script.js"></script>
   </body>
 </html>
