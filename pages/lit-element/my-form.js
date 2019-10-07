@@ -16,6 +16,7 @@ class MyForm extends LitElement {
   }
 
   static get styles() {
+    // TODO: Используем tag-функцию css
     return css`
       form {
         display: flex;
