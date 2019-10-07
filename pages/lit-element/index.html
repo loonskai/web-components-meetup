@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Custom Element</title>
+    <title>lit-element</title>
     <link rel="stylesheet" href="/assets/style.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Creepster&display=swap"
@@ -28,7 +28,10 @@
       <h1>lit-element</h1>
     </div>
     <!-- TODO: Одно из главных ограничений стандарта веб-компонентов на данный момент - отсутствие возможности передавать сложные типы данных через аттрибуты. Единственный принимаемый формат - строка. Т.е. мы можем уже внутри, с помощью тех же геттеров десериализовать в нужный нам формат, но это куча дополнительного кода. lit-element предоставляет возможность сделать это за нас -->
-    <my-login attemptsAllowed="5" hints='["Enter your credentials", "Press Sign In", "Be happy"]'>
+    <my-login
+      attemptsAllowed="5"
+      hints='["Enter your credentials", "Press Sign In", "Be happy"]'
+    >
       <!-- TODO: Рассказать про слоты и light DOM-->
       <!-- TODO: Показать через инспектор, где shadow dom, а где переданные картинки (light DOM) -->
       <img
