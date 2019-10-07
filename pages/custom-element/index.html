@@ -13,8 +13,54 @@
       <a href="/index.html">&lt;</a>
       <h1>Pure Custom Element</h1>
     </div>
+    <template id="searchBoxTemplate">
+      <style>
+        @import url('https://fonts.googleapis.com/css?family=Fredoka+One&display=swap');
+        .wrapper {
+          width: 220px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          background-color: var(--main-dark-color);
+          border: 10px solid var(--main-color);
+          border-radius: 20px;
+          padding: 10px;
+          padding-bottom: 20px;
+          transition: border-color 0.5s;
+        }
+
+        h1 {
+          font-family: 'Fredoka One', cursive;
+          font-size: 16px;
+          color: var(--main-color);
+          transition: color 0.5s;
+        }
+
+        input {
+          border-radius: 5px;
+          border: none;
+          padding: 10px;
+          margin-bottom: 20px;
+          transition: box-shadow 0.5s;
+          color: var(--main-dark-color);
+          font-family: 'Fredoka One', cursive;
+        }
+
+        input:focus {
+          outline: none;
+          box-shadow: 0 0 0 3px var(--main-color);
+          border-radius: 5px;
+          transition: box-shadow 0.5s;
+        }
+      </style>
+      <div class="wrapper">
+        <h1></h1>
+        <input type="text" />
+        <img />
+      </div>
+    </template>
     <!-- TODO: Определяем название кастомного элемента, обязательное условие - наличие дефиса в названии  -->
-    <my-search-box value="Somevalue">Search Box</my-search-box>
+    <my-search-box title="Search Box" value=""></my-search-box>
     <!-- TODO: Создавать наш элемент будем в файле script.js -->
     <script type="module" src="script.js"></script>
   </body>

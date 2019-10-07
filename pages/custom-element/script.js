@@ -6,61 +6,8 @@ class MySearchBox extends HTMLElement {
     /* TODO: Заводим shadow DOM. Это не обязательно при создании кастомных элементов, используйте если вам НУЖНО инкупсулироваться от внешнего мира */
     const shadow = this.attachShadow({ mode: 'open' });
 
-    /* TODO: Единственный способ описания содержимого компонента - DOM API. Всё. Пока. Можно писать обертки, использовать либы lit-html и lit-element, но если говорить о чистейшей нативности - только так, императивно. Можно и через innerHTML, кстати */
-    const wrapper = document.createElement('div');
-    wrapper.setAttribute('class', 'wrapper');
-    const title = document.createElement('h1');
-    title.textContent = this.textContent || 'Default title';
-    const input = document.createElement('input');
-    const img = document.createElement('img');
-    /* TODO: Обратите внимание на тег style. Он независм для нашего компонента, и при использовании shadow DOM не будет конфликтовать со внешними стилями */
-    const style = document.createElement('style');
-    style.textContent = `
-      @import url('https://fonts.googleapis.com/css?family=Fredoka+One&display=swap');
-      .wrapper {
-        width: 220px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        background-color: var(--main-dark-color);
-        border: 10px solid var(--main-color);
-        border-radius: 20px;
-        padding: 10px;
-        padding-bottom: 20px;
-        transition: border-color 0.5s;
-      }
-
-      h1 {
-        font-family: 'Fredoka One', cursive;
-        font-size: 16px;
-        color: var(--main-color);
-        transition: color 0.5s;
-      }
-
-      input {
-        border-radius: 5px;
-        border: none;
-        padding: 10px;
-        margin-bottom: 20px;
-        transition: box-shadow 0.5s;
-        color: var(--main-dark-color);
-        font-family: 'Fredoka One', cursive;
-      }
-
-      input:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px var(--main-color);
-        border-radius: 5px;
-        transition: box-shadow 0.5s;
-      }
-    `;
-
-    // TODO: Добавляем наши элементы в shadow DOM
-    shadow.appendChild(style);
-    shadow.appendChild(wrapper);
-    wrapper.appendChild(title);
-    wrapper.appendChild(input);
-    wrapper.appendChild(img);
+    // TODO: Добавляем содержимое template тега в shadow DOM
+    shadow.appendChild(searchBoxTemplate.content.cloneNode(true));
   }
 
   static get observedAttributes() {
@@ -74,6 +21,7 @@ class MySearchBox extends HTMLElement {
     input.addEventListener('input', e => {
       this.setAttribute('value', e.target.value);
     });
+    title.textContent = this.title || 'Default title';
     // TODO: Наш кастомный метод updateTheme будет отвечать за обновление цветов в зависимости от того, валидно или нет значение, введеное в поле. Вызываем его также при моунте компонента
     this.updateTheme();
   }
