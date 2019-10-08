@@ -17,15 +17,12 @@ class LitHtmlSearchBox extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue) return;
-    // TODO: Функция render помещает наш template как содержимое второго аргумента, в данном случае shadowRoot 
     render(this.template, this.shadowRoot);
     this.updateTheme();
   }
 
-  // TODO: template - тоже наш кастомный геттер
+  /* Our custom properties */
   get template() {
-    // TODO: Фунцкция html - tag function, которая внутри парсит нашу разметку и данные по-отдельности, возврашая объект TemplateResult. lit-html также дает возможность использовать различные байндинги: event listeners -@, properties - ., свойсва с булевым значением (напр. disabled, checked) - ?, текст - внутри плейсхолдера ${}.
-    // TODO: Рассказать про разницу между property и attribute
     return html`
       <style>
         @import url('https://fonts.googleapis.com/css?family=Fredoka+One&display=swap');
@@ -74,7 +71,6 @@ class LitHtmlSearchBox extends HTMLElement {
     `;
   }
 
-  // TODO: Все те же геттеры для вычисляемых свойств
   get value() {
     return this.getAttribute('value').toLowerCase();
   }

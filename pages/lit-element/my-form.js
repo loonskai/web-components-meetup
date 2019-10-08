@@ -16,7 +16,6 @@ class MyForm extends LitElement {
   }
 
   static get styles() {
-    // TODO: Используем tag-функцию css
     return css`
       form {
         display: flex;
@@ -67,18 +66,11 @@ class MyForm extends LitElement {
 
   handleSubmit(e) {
     e.preventDefault();
-    /* TODO: Рассказать вкратце про Custom Events */
-    /* TODO: Создаем кастомное событие custom-submit, чтобы иметь возможность отловить его выше, вне shadowDOM */
     const event = new CustomEvent('custom-submit', {
-      // bubbles - для того, чтобы наше событие всплывало
       bubbles: true,
-      // composed - флаг, отвечающий за возможность "преодоления" границы между shadow DOM и обычного DOM
       composed: true,
-      // detail - данные, которые мы хотим прокинуть вверх
       detail: { email: this.email, password: this.password },
     });
-
-    // И диспатчим наше кастомное событие на текущем элементе
     this.dispatchEvent(event);
   }
 
