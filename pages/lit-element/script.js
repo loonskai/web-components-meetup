@@ -109,7 +109,7 @@ class MyLogin extends LitElement {
         </div>
       </div>
       ${!this.successed
-          html`
+        ? html`
             <my-form
               @custom-submit=${this.handleSubmit}
               ?disabled="${this.isLoading || this.failed}"
