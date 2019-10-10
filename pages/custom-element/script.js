@@ -10,7 +10,7 @@ class MySearchBox extends HTMLElement {
   }
 
   connectedCallback() {
-    const [title, input, img] = this.childElements;
+    const [title, input, img] = this._childElements;
     input.addEventListener('input', e => {
       this.setAttribute('value', e.target.value);
     });
@@ -21,8 +21,8 @@ class MySearchBox extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue) return;
     if (name === 'value') {
-      const [title, input, img] = this.childElements;
-      img.setAttribute('src', this.imageUrl);
+      const [title, input, img] = this._childElements;
+      img.setAttribute('src', this._imageUrl);
       this.updateTheme();
     }
   }
@@ -30,7 +30,7 @@ class MySearchBox extends HTMLElement {
   /* My custom methods */
   updateTheme() {
     let mainColor;
-    switch (this.status) {
+    switch (this._status) {
       case 'valid':
         mainColor = 'mediumspringgreen';
         break;
@@ -45,22 +45,22 @@ class MySearchBox extends HTMLElement {
   }
 
   /* My custom computed properties */
-  get value() {
+  get _value() {
     return this.getAttribute('value').toLowerCase();
   }
 
-  get imageUrl() {
+  get _imageUrl() {
     return `/assets/images/${
-      EXISTING_NAMES.includes(this.value) ? this.value : 'default'
+      EXISTING_NAMES.includes(this._value) ? this._value : 'default'
     }.jpg`;
   }
 
-  get status() {
-    if (RESTRICTED_NAMES.includes(this.value)) return 'invalid';
-    return EXISTING_NAMES.includes(this.value) ? 'valid' : 'default';
+  get _status() {
+    if (RESTRICTED_NAMES.includes(this._value)) return 'invalid';
+    return EXISTING_NAMES.includes(this._value) ? 'valid' : 'default';
   }
 
-  get childElements() {
+  get _childElements() {
     return this.shadowRoot.querySelector('.wrapper').children;
   }
 }

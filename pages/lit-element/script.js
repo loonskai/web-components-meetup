@@ -37,7 +37,7 @@ class MyLogin extends LitElement {
     return css`
       :host {
         display: inline-block;
-        background-color: #f8f7f3;
+        background-color: #b1d3f9;
         padding: 20px;
         width: 300px;
         border-radius: 10px;
@@ -102,7 +102,7 @@ class MyLogin extends LitElement {
   render() {
     return html`
       <div class="counter">
-        ${this.beCareful}
+        ${this._beCareful}
         <span>Attempts</span>
         <div>
           ${this.attempts} / ${this.attemptsAllowed}
@@ -111,7 +111,7 @@ class MyLogin extends LitElement {
       ${!this.successed
         ? html`
             <my-form
-              @custom-submit=${this.handleSubmit}
+              @custom-submit=${this._handleSubmit}
               ?disabled="${this.isLoading || this.failed}"
             ></my-form>
           `
@@ -146,7 +146,7 @@ class MyLogin extends LitElement {
   }
 
   /* Our custom methods */
-  handleSubmit(event) {
+  _handleSubmit(event) {
     this.attempts += 1;
     const { email, password } = event.detail;
     this.messageRequest = new Promise(resolve => {
@@ -166,7 +166,7 @@ class MyLogin extends LitElement {
     });
   }
 
-  get beCareful() {
+  get _beCareful() {
     return this.attempts === this.attemptsAllowed - 1 && this.successed !== true
       ? html`
           <span class="be-careful">Be careful</span>

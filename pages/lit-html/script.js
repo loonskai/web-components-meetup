@@ -65,7 +65,10 @@ class LitHtmlSearchBox extends HTMLElement {
       </style>
       <div class="wrapper">
         <h1>${this.textContent || 'Default title'}</h1>
-        <input @input=${e => this.setAttribute('value', e.target.value)} />
+        <input
+          @input=${e => this.setAttribute('value', e.target.value)}
+          autocomplete="off"
+        />
         <img .src="${this.imageUrl}" />
       </div>
     `;

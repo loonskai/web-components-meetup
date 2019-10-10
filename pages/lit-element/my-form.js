@@ -5,7 +5,7 @@ class MyForm extends LitElement {
     return {
       email: { type: String },
       password: { type: String },
-      disabled: { type: Boolean },
+      disabled: { type: Boolean }
     };
   }
 
@@ -69,7 +69,7 @@ class MyForm extends LitElement {
     const event = new CustomEvent('custom-submit', {
       bubbles: true,
       composed: true,
-      detail: { email: this.email, password: this.password },
+      detail: { email: this.email, password: this.password }
     });
     this.dispatchEvent(event);
   }
@@ -83,6 +83,7 @@ class MyForm extends LitElement {
           ?disabled=${this.disabled}
           name="email"
           type="email"
+          autocomplete="off"
         />
         <input
           @input=${this.handleChange}
@@ -90,6 +91,7 @@ class MyForm extends LitElement {
           ?disabled=${this.disabled}
           name="password"
           type="password"
+          autocomplete="off"
         />
         <button ?disabled=${this.disabled} type="submit">
           Sign In
